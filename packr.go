@@ -11,26 +11,26 @@ import (
 
 var boxes = &boxMap{}
 
-var _ = safe.Run(func() {
+var _ = safe.Run(func() error {
 	p, err := parser.NewFromRoots([]string{}, nil)
 	if err != nil {
 		plog.Logger.Error(err)
-		return
+		return err
 	}
 	boxes, err := p.Run()
 	if err != nil {
 		plog.Logger.Error(err)
-		return
+		return err
 	}
 	for _, box := range boxes {
 		b := construct(box.Name, box.AbsPath)
 		_, err = placeBox(b)
 		if err != nil {
 			plog.Logger.Error(err)
-			return
+			return err
 		}
 	}
-
+	return nil
 })
 
 func findBox(name string) (*Box, error) {
